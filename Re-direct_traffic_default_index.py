@@ -17,3 +17,21 @@ def lambda_handler(event, context):
 
     # Return to CloudFront
     return request
+
+
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Other way>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+def lambda_handler(event, context):
+    request = event['Records'][0]['cf']['request']
+    uri = request['uri']
+    ends_with_slash = uri.endswith('/')
+
+    if ends_with_slash or not '.' in uri:
+        request['uri'] = f"{uri}{'' if ends_with_slash else '/'}index.html"
+        return request
+    elif uri.rsplit('/', 1)[-1] != 'index.html':
+        request['uri'] = f"{uri}/index.html"
+        return request
+    else:
+        return request
